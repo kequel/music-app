@@ -1,0 +1,72 @@
+package org.example;
+import java.io.Serializable;
+import java.util.*;
+
+public class Album implements Serializable {
+    private static final long serialVersionUID = 1L;
+
+    private final UUID id;
+    private final String title;
+    private final String artist;
+    private final int releaseYear;
+    private final List<Song> songs = new ArrayList<>();
+
+    private Album(Builder b) {
+        this.id = b.id;
+        this.title = b.title;
+        this.artist = b.artist;
+        this.releaseYear = b.releaseYear;
+    }
+
+    public UUID getId() { return id; }
+    public String getTitle() { return title; }
+    public String getArtist() { return artist; }
+    public int getReleaseYear() { return releaseYear; }
+    public List<Song> getSongs() { return songs; }
+
+    public void addSong(Song song) {
+        if (song != null) {
+            songs.add(song);
+            if (song.getAlbum() != this) {
+                song.setAlbum(this);
+            }
+        }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Album)) return false;
+        Album album = (Album) o;
+        return id.equals(album.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+
+    @Override
+    public String toString() {
+        return  title + " BY "+ artist + ", " + releaseYear + "r, " + songs.size() + " songs" +'\n';
+    }
+
+    public static Builder builder() { return new Builder(); }
+
+    public static class Builder {
+        private UUID id = UUID.randomUUID();
+        private String title;
+        private String artist;
+        private int releaseYear;
+
+        public Builder id(UUID id) { this.id = id; return this; }
+        public Builder title(String title) { this.title = title; return this; }
+        public Builder artist(String artist) { this.artist = artist; return this; }
+        public Builder releaseYear(int year) { this.releaseYear = year; return this; }
+
+        public Album build() {
+            if (title == null || artist == null) throw new IllegalStateException("Album title and artist required");
+            return new Album(this);
+        }
+    }
+}

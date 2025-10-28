@@ -1,15 +1,31 @@
 package org.example;
+import jakarta.persistence.*;
 import java.io.Serializable;
 import java.util.*;
 
+@Entity
+@Table(name = "albums")
 public class Album implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    private final UUID id;
-    private final String title;
-    private final String artist;
-    private final int releaseYear;
-    private final List<Song> songs = new ArrayList<>();
+    @Id
+    private UUID id;
+
+    @Column(name = "title", nullable = false)
+    private String title;
+
+    @Column(name = "artist", nullable = false)
+    private String artist;
+
+    @Column(name = "release_year")
+    private int releaseYear;
+
+    //1:n
+    @OneToMany(mappedBy = "album", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<Song> songs = new ArrayList<>();
+
+    //JPA rule
+    protected Album() {}
 
     private Album(Builder b) {
         this.id = b.id;
@@ -36,8 +52,7 @@ public class Album implements Serializable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Album)) return false;
-        Album album = (Album) o;
+        if (!(o instanceof Album album)) return false;
         return id.equals(album.id);
     }
 
@@ -65,7 +80,7 @@ public class Album implements Serializable {
         public Builder releaseYear(int year) { this.releaseYear = year; return this; }
 
         public Album build() {
-            if (title == null || artist == null) throw new IllegalStateException("Album title and artist required");
+            if (title == null || artist == null) throw new IllegalStateException("TITLE AN ARTIST REQUIRED.");
             return new Album(this);
         }
     }

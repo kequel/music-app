@@ -1,4 +1,4 @@
-package org.example;
+package org.example.dto;
 import java.io.Serializable;
 import java.util.Objects;
 

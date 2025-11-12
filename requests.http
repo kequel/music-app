@@ -1,0 +1,70 @@
+### Get all albums
+GET http://localhost:8080/api/albums
+
+### Get specific album
+GET http://localhost:8080/api/albums/654432b5-960c-4513-ad05-d54417c0fe5e
+
+### Create new album
+POST http://localhost:8080/api/albums
+Content-Type: application/json
+
+{
+  "title": "Anthem for the Underdog",
+  "artist": "12 Stones",
+  "releaseYear": 2007
+}
+
+### Update album
+PUT http://localhost:8080/api/albums/3c81844f-0304-4097-905c-46c17819a19b
+Content-Type: application/json
+
+{
+  "title": "Anthem for the Underdog (Bonus Track Version)",
+  "artist": "12 Stones",
+  "releaseYear": 2007
+}
+
+### Delete album (will delete all songs in it)
+DELETE http://localhost:8080/api/albums/3c81844f-0304-4097-905c-46c17819a19b
+
+### Get all songs from all albums
+GET http://localhost:8080/api/songs
+
+### Get songs from specific album
+GET http://localhost:8080/api/albums/3c81844f-0304-4097-905c-46c17819a19b/songs
+
+### Get specific song from album
+GET http://localhost:8080/api/albums/3c81844f-0304-4097-905c-46c17819a19b/songs/4d92080b-2096-4c02-b225-7ff026a379e8
+
+### Create song in album
+POST http://localhost:8080/api/albums/3c81844f-0304-4097-905c-46c17819a19b/songs
+Content-Type: application/json
+
+{
+  "title": "Lie to Me",
+  "durationMinutes": 3
+}
+
+### Update song
+PUT http://localhost:8080/api/albums/3c81844f-0304-4097-905c-46c17819a19b/songs/4d92080b-2096-4c02-b225-7ff026a379e8
+Content-Type: application/json
+
+{
+  "title": "Lie to Me (acoustic)",
+  "durationMinutes": 3
+}
+
+### Delete song
+DELETE http://localhost:8080/api/albums/3c81844f-0304-4097-905c-46c17819a19b/songs/4d92080b-2096-4c02-b225-7ff026a379e8
+
+### Test: Get songs from non-existent album (should return 404)
+GET http://localhost:8080/api/albums/00000000-0000-0000-0000-000000000000/songs
+
+### Test: Create song in non-existent album (should return 404)
+POST http://localhost:8080/api/albums/00000000-0000-0000-0000-000000000000/songs
+Content-Type: application/json
+
+{
+  "title": "Test Song",
+  "durationMinutes": 3
+}

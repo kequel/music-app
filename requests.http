@@ -1,10 +1,14 @@
-### Get all albums
+### ============================================
+### GATEWAY SERVICE (Port 8080)
+### ============================================
+
+### Get all albums (via Gateway)
 GET http://localhost:8080/api/albums
 
-### Get specific album
-GET http://localhost:8080/api/albums/654432b5-960c-4513-ad05-d54417c0fe5e
+### Get specific album (via Gateway)
+GET http://localhost:8080/api/albums/{{albumId}}
 
-### Create new album
+### Create new album (via Gateway)
 POST http://localhost:8080/api/albums
 Content-Type: application/json
 
@@ -14,8 +18,8 @@ Content-Type: application/json
   "releaseYear": 2007
 }
 
-### Update album
-PUT http://localhost:8080/api/albums/3c81844f-0304-4097-905c-46c17819a19b
+### Update album (via Gateway)
+PUT http://localhost:8080/api/albums/{{albumId}}
 Content-Type: application/json
 
 {
@@ -24,20 +28,20 @@ Content-Type: application/json
   "releaseYear": 2007
 }
 
-### Delete album (will delete all songs in it)
-DELETE http://localhost:8080/api/albums/3c81844f-0304-4097-905c-46c17819a19b
+### Delete album - will trigger event to delete songs (via Gateway)
+DELETE http://localhost:8080/api/albums/{{albumId}}
 
-### Get all songs from all albums
+### Get all songs from all albums (via Gateway)
 GET http://localhost:8080/api/songs
 
-### Get songs from specific album
-GET http://localhost:8080/api/albums/3c81844f-0304-4097-905c-46c17819a19b/songs
+### Get songs from specific album (via Gateway)
+GET http://localhost:8080/api/albums/{{albumId}}/songs
 
-### Get specific song from album
-GET http://localhost:8080/api/albums/3c81844f-0304-4097-905c-46c17819a19b/songs/4d92080b-2096-4c02-b225-7ff026a379e8
+### Get specific song from album (via Gateway)
+GET http://localhost:8080/api/albums/{{albumId}}/songs/{{songId}}
 
-### Create song in album
-POST http://localhost:8080/api/albums/3c81844f-0304-4097-905c-46c17819a19b/songs
+### Create song in album (via Gateway)
+POST http://localhost:8080/api/albums/{{albumId}}/songs
 Content-Type: application/json
 
 {
@@ -45,8 +49,8 @@ Content-Type: application/json
   "durationMinutes": 3
 }
 
-### Update song
-PUT http://localhost:8080/api/albums/3c81844f-0304-4097-905c-46c17819a19b/songs/4d92080b-2096-4c02-b225-7ff026a379e8
+### Update song (via Gateway)
+PUT http://localhost:8080/api/albums/{{albumId}}/songs/{{songId}}
 Content-Type: application/json
 
 {
@@ -54,13 +58,13 @@ Content-Type: application/json
   "durationMinutes": 3
 }
 
-### Delete song
-DELETE http://localhost:8080/api/albums/3c81844f-0304-4097-905c-46c17819a19b/songs/4d92080b-2096-4c02-b225-7ff026a379e8
+### Delete song (via Gateway)
+DELETE http://localhost:8080/api/albums/{{albumId}}/songs/{{songId}}
 
-### Test: Get songs from non-existent album (should return 404)
+### Test: Get songs from non-existent album (via Gateway)
 GET http://localhost:8080/api/albums/00000000-0000-0000-0000-000000000000/songs
 
-### Test: Create song in non-existent album (should return 404)
+### Test: Create song in non-existent album (via Gateway)
 POST http://localhost:8080/api/albums/00000000-0000-0000-0000-000000000000/songs
 Content-Type: application/json
 
@@ -68,3 +72,13 @@ Content-Type: application/json
   "title": "Test Song",
   "durationMinutes": 3
 }
+
+### ============================================
+### DIRECT SERVICE ACCESS (for testing)
+### ============================================
+
+### Direct: Get all albums (Album Service - Port 8081)
+GET http://localhost:8081/api/albums
+
+### Direct: Get all songs (Song Service - Port 8082)
+GET http://localhost:8082/api/songs

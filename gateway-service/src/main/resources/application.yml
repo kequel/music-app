@@ -1,0 +1,44 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: gateway-service
+  cloud:
+    gateway:
+      routes:
+        # Routing dla Album Service
+        - id: album-service
+          uri: http://localhost:8081
+          predicates:
+            - Path=/api/albums/**
+          filters:
+            - RewritePath=/api/albums/(?<segment>.*), /api/albums/$\{segment}
+
+        # Routing dla Song Service (wszystkie piosenki)
+        - id: song-service-all
+          uri: http://localhost:8082
+          predicates:
+            - Path=/api/songs
+          filters:
+            - RewritePath=/api/songs, /api/songs
+
+        # Routing dla Song Service (piosenki w albumach)
+        - id: song-service-by-album
+          uri: http://localhost:8082
+          predicates:
+            - Path=/api/albums/*/songs/**
+          filters:
+            - RewritePath=/api/albums/(?<albumId>[^/]+)/songs/(?<segment>.*), /api/albums/$\{albumId}/songs/$\{segment}
+
+        # Routing dla Song Service (lista piosenek w albumie)
+        - id: song-service-album-songs
+          uri: http://localhost:8082
+          predicates:
+            - Path=/api/albums/*/songs
+          filters:
+            - RewritePath=/api/albums/(?<albumId>[^/]+)/songs, /api/albums/$\{albumId}/songs
+
+logging:
+  level:
+    org.springframework.cloud.gateway: DEBUG

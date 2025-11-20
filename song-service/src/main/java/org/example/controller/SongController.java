@@ -1,6 +1,5 @@
 package org.example.controller;
 
-import org.example.AlbumInfo;
 import org.example.Song;
 import org.example.dto.*;
 import org.example.service.AlbumInfoService;
@@ -44,7 +43,7 @@ public class SongController {
             return ResponseEntity.notFound().build();
         }
 
-        return songService.findById(songId)
+        return (ResponseEntity<SongReadDto>) songService.findById(songId)
                 .map(song -> {
                     if (song.getAlbumInfo() != null && !song.getAlbumInfo().getId().equals(albumId)) {
                         return ResponseEntity.<SongReadDto>notFound().build();
@@ -97,7 +96,7 @@ public class SongController {
             return ResponseEntity.notFound().build();
         }
 
-        return songService.findById(songId)
+        return (ResponseEntity<SongReadDto>) songService.findById(songId)
                 .map(existingSong -> {
                     if (existingSong.getAlbumInfo() == null || !existingSong.getAlbumInfo().getId().equals(albumId)) {
                         return ResponseEntity.<SongReadDto>notFound().build();
@@ -126,7 +125,7 @@ public class SongController {
     }
 
     @DeleteMapping("/{songId}")
-    public ResponseEntity<Void> deleteSong(@PathVariable UUID albumId, @PathVariable UUID songId) {
+    public ResponseEntity<Object> deleteSong(@PathVariable UUID albumId, @PathVariable UUID songId) {
         if (albumInfoService.findById(albumId).isEmpty()) {
             return ResponseEntity.notFound().build();
         }

@@ -28,8 +28,9 @@ public class DataInitializer implements CommandLineRunner {
                 .releaseYear(1973)
                 .build();
 
-        albumService.save(a1);
-        albumService.save(a2);
+        // Use create() to properly publish events
+        albumService.create(a1);
+        albumService.create(a2);
 
         System.out.println("Albums initialized: " + albumService.findAll().size());
     }

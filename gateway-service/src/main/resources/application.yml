@@ -7,38 +7,33 @@ spring:
   cloud:
     gateway:
       routes:
-        # Routing dla Album Service
+        # Album Service - all album endpoints
         - id: album-service
           uri: http://localhost:8081
           predicates:
             - Path=/api/albums/**
           filters:
-            - RewritePath=/api/albums/(?<segment>.*), /api/albums/$\{segment}
+            - StripPrefix=0
 
-        # Routing dla Song Service (wszystkie piosenki)
+        # Song Service - get all songs (not in album context)
         - id: song-service-all
           uri: http://localhost:8082
           predicates:
             - Path=/api/songs
+            - Method=GET
           filters:
-            - RewritePath=/api/songs, /api/songs
+            - StripPrefix=0
 
-        # Routing dla Song Service (piosenki w albumach)
-        - id: song-service-by-album
-          uri: http://localhost:8082
-          predicates:
-            - Path=/api/albums/*/songs/**
-          filters:
-            - RewritePath=/api/albums/(?<albumId>[^/]+)/songs/(?<segment>.*), /api/albums/$\{albumId}/songs/$\{segment}
-
-        # Routing dla Song Service (lista piosenek w albumie)
+        # Song Service - album-related song operations
+        # This catches /api/albums/{albumId}/songs/** paths
         - id: song-service-album-songs
           uri: http://localhost:8082
           predicates:
-            - Path=/api/albums/*/songs
+            - Path=/api/albums/*/songs,/api/albums/*/songs/**
           filters:
-            - RewritePath=/api/albums/(?<albumId>[^/]+)/songs, /api/albums/$\{albumId}/songs
+            - StripPrefix=0
 
 logging:
   level:
     org.springframework.cloud.gateway: DEBUG
+    reactor.netty: DEBUG

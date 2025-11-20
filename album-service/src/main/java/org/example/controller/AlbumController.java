@@ -38,7 +38,7 @@ public class AlbumController {
                             album.getTitle(),
                             album.getArtist(),
                             album.getReleaseYear(),
-                            0 // Song count nie jest już dostępny bezpośrednio
+                            0
                     );
                     return ResponseEntity.ok(dto);
                 })
@@ -53,7 +53,8 @@ public class AlbumController {
                 .releaseYear(dto.getReleaseYear())
                 .build();
 
-        Album savedAlbum = albumService.save(album);
+        // Use create() method which publishes event
+        Album savedAlbum = albumService.create(album);
 
         AlbumReadDto responseDto = new AlbumReadDto(
                 savedAlbum.getId(),
@@ -77,7 +78,8 @@ public class AlbumController {
                             .releaseYear(dto.getReleaseYear())
                             .build();
 
-                    Album savedAlbum = albumService.save(updatedAlbum);
+                    // Use update() method which does NOT publish event
+                    Album savedAlbum = albumService.update(updatedAlbum);
 
                     AlbumReadDto responseDto = new AlbumReadDto(
                             savedAlbum.getId(),

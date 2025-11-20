@@ -6,7 +6,7 @@
 GET http://localhost:8080/api/albums
 
 ### Get specific album (via Gateway)
-GET http://localhost:8080/api/albums/{{albumId}}
+GET http://localhost:8080/api/albums/c3d79e34-9281-49b7-85ec-d8d2a949cb82
 
 ### Create new album (via Gateway)
 POST http://localhost:8080/api/albums
@@ -19,7 +19,7 @@ Content-Type: application/json
 }
 
 ### Update album (via Gateway)
-PUT http://localhost:8080/api/albums/{{albumId}}
+PUT http://localhost:8080/api/albums/c3d79e34-9281-49b7-85ec-d8d2a949cb82
 Content-Type: application/json
 
 {
@@ -29,19 +29,19 @@ Content-Type: application/json
 }
 
 ### Delete album - will trigger event to delete songs (via Gateway)
-DELETE http://localhost:8080/api/albums/{{albumId}}
+DELETE http://localhost:8080/api/albums/c3d79e34-9281-49b7-85ec-d8d2a949cb82
 
 ### Get all songs from all albums (via Gateway)
 GET http://localhost:8080/api/songs
 
 ### Get songs from specific album (via Gateway)
-GET http://localhost:8080/api/albums/{{albumId}}/songs
+GET http://localhost:8080/api/albums/c3d79e34-9281-49b7-85ec-d8d2a949cb82/songs
 
 ### Get specific song from album (via Gateway)
-GET http://localhost:8080/api/albums/{{albumId}}/songs/{{songId}}
+GET http://localhost:8080/api/albums/c3d79e34-9281-49b7-85ec-d8d2a949cb82/songs/bef1379b-1669-450f-ae04-c4255ee58e10
 
 ### Create song in album (via Gateway)
-POST http://localhost:8080/api/albums/{{albumId}}/songs
+POST http://localhost:8080/api/albums/c3d79e34-9281-49b7-85ec-d8d2a949cb82/songs
 Content-Type: application/json
 
 {
@@ -50,7 +50,7 @@ Content-Type: application/json
 }
 
 ### Update song (via Gateway)
-PUT http://localhost:8080/api/albums/{{albumId}}/songs/{{songId}}
+PUT http://localhost:8080/api/albums/c3d79e34-9281-49b7-85ec-d8d2a949cb82/songs/bef1379b-1669-450f-ae04-c4255ee58e10
 Content-Type: application/json
 
 {
@@ -59,7 +59,7 @@ Content-Type: application/json
 }
 
 ### Delete song (via Gateway)
-DELETE http://localhost:8080/api/albums/{{albumId}}/songs/{{songId}}
+DELETE http://localhost:8080/api/albums/c3d79e34-9281-49b7-85ec-d8d2a949cb82/songs/bef1379b-1669-450f-ae04-c4255ee58e10
 
 ### Test: Get songs from non-existent album (via Gateway)
 GET http://localhost:8080/api/albums/00000000-0000-0000-0000-000000000000/songs

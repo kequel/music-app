@@ -22,15 +22,21 @@ public class AlbumService {
         this.eventPublisher = eventPublisher;
     }
 
-    public Album save(Album album) {
+    // Separate method for creating new albums (with event)
+    public Album create(Album album) {
         Album savedAlbum = albumRepository.save(album);
-        // Publikuj event o nowym albumie
+        // Publish event only for NEW albums
         eventPublisher.publishAlbumCreated(
                 savedAlbum.getId(),
                 savedAlbum.getTitle(),
                 savedAlbum.getArtist()
         );
         return savedAlbum;
+    }
+
+    // Separate method for updating existing albums (no event)
+    public Album update(Album album) {
+        return albumRepository.save(album);
     }
 
     @Transactional(readOnly = true)
@@ -44,7 +50,7 @@ public class AlbumService {
     }
 
     public void deleteById(UUID id) {
-        // Publikuj event o usunięciu albumu
+        // Publish event about album deletion
         eventPublisher.publishAlbumDeleted(id);
         albumRepository.deleteById(id);
     }

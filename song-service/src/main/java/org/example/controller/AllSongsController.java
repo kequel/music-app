@@ -21,7 +21,12 @@ public class AllSongsController {
     @GetMapping
     public ResponseEntity<List<SongListDto>> getAllSongs() {
         List<SongListDto> songs = songService.findAll().stream()
-                .map(song -> new SongListDto(song.getId(), song.getTitle()))
+                .map(song -> new SongListDto(
+                        song.getId(),
+                        song.getTitle(),
+                        song.getDurationMinutes(),
+                        song.getAlbumInfo() != null ? song.getAlbumInfo().getId() : null
+                ))
                 .collect(Collectors.toList());
         return ResponseEntity.ok(songs);
     }

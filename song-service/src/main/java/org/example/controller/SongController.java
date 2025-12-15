@@ -30,7 +30,12 @@ public class SongController {
         return albumInfoService.findById(albumId)
                 .map(albumInfo -> {
                     List<SongListDto> songs = songService.findByAlbumInfo(albumInfo).stream()
-                            .map(song -> new SongListDto(song.getId(), song.getTitle()))
+                            .map(song -> new SongListDto(
+                                    song.getId(),
+                                    song.getTitle(),
+                                    song.getDurationMinutes(),
+                                    albumInfo.getId()
+                            ))
                             .collect(Collectors.toList());
                     return ResponseEntity.ok(songs);
                 })
@@ -43,7 +48,7 @@ public class SongController {
             return ResponseEntity.notFound().build();
         }
 
-        return (ResponseEntity<SongReadDto>) songService.findById(songId)
+        return (ResponseEntity<SongReadDto>) (ResponseEntity<SongReadDto>) songService.findById(songId)
                 .map(song -> {
                     if (song.getAlbumInfo() != null && !song.getAlbumInfo().getId().equals(albumId)) {
                         return ResponseEntity.<SongReadDto>notFound().build();

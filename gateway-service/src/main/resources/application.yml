@@ -7,11 +7,11 @@ spring:
   cloud:
     gateway:
       routes:
-        # Album Service - all album endpoints
-        - id: album-service
-          uri: http://localhost:8081
+        # Song Service - album-related song operations
+        - id: song-service-album-songs
+          uri: http://localhost:8082
           predicates:
-            - Path=/api/albums/**
+            - Path=/api/albums/*/songs,/api/albums/*/songs/**
           filters:
             - StripPrefix=0
 
@@ -24,12 +24,11 @@ spring:
           filters:
             - StripPrefix=0
 
-        # Song Service - album-related song operations
-        # This catches /api/albums/{albumId}/songs/** paths
-        - id: song-service-album-songs
-          uri: http://localhost:8082
+        # Album Service - all album endpoints
+        - id: album-service
+          uri: http://localhost:8081
           predicates:
-            - Path=/api/albums/*/songs,/api/albums/*/songs/**
+            - Path=/api/albums/**
           filters:
             - StripPrefix=0
 

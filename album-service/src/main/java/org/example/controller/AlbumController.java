@@ -24,7 +24,7 @@ public class AlbumController {
     @GetMapping
     public ResponseEntity<List<AlbumListDto>> getAllAlbums() {
         List<AlbumListDto> albums = albumService.findAll().stream()
-                .map(album -> new AlbumListDto(album.getId(), album.getTitle(), album.getArtist()))
+                .map(album -> new AlbumListDto(album.getId(), album.getTitle(), album.getArtist(), album.getReleaseYear()))
                 .collect(Collectors.toList());
         return ResponseEntity.ok(albums);
     }

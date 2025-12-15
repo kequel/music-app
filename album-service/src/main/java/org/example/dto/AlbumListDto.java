@@ -6,13 +6,15 @@ public class AlbumListDto {
     private UUID id;
     private String title;
     private String artist;
+    private Integer releaseYear;
 
     public AlbumListDto() {}
 
-    public AlbumListDto(UUID id, String title, String artist) {
+    public AlbumListDto(UUID id, String title, String artist, Integer releaseYear) {
         this.id = id;
         this.title = title;
         this.artist = artist;
+        this.releaseYear = releaseYear;
     }
 
     public UUID getId() { return id; }
@@ -23,4 +25,7 @@ public class AlbumListDto {
 
     public String getArtist() { return artist; }
     public void setArtist(String artist) { this.artist = artist; }
+
+    public Integer getReleaseYear() { return releaseYear; }
+    public void setReleaseYear(Integer releaseYear) { this.releaseYear = releaseYear; }
 }

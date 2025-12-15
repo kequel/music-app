@@ -1,14 +1,12 @@
-### ============================================
-### GATEWAY SERVICE (Port 8080)
-### ============================================
+### GATEWAY
 
 ### Get all albums (via Gateway)
 GET http://localhost:8080/api/albums
 
 ### Get specific album (via Gateway)
-GET http://localhost:8080/api/albums/c3d79e34-9281-49b7-85ec-d8d2a949cb82
+GET http://localhost:8080/api/albums/1e0cbdc4-22d5-4cdc-85ee-62af69a6f298
 
-### Create new album (via Gateway)
+### Create new album (viaa Gateway)
 POST http://localhost:8080/api/albums
 Content-Type: application/json
 
@@ -19,7 +17,7 @@ Content-Type: application/json
 }
 
 ### Update album (via Gateway)
-PUT http://localhost:8080/api/albums/c3d79e34-9281-49b7-85ec-d8d2a949cb82
+PUT http://localhost:8080/api/albums/c94fecea-3f2c-4e83-9317-4a569437729a
 Content-Type: application/json
 
 {
@@ -29,13 +27,13 @@ Content-Type: application/json
 }
 
 ### Delete album - will trigger event to delete songs (via Gateway)
-DELETE http://localhost:8080/api/albums/c3d79e34-9281-49b7-85ec-d8d2a949cb82
+DELETE http://localhost:8080/api/albums/1e0cbdc4-22d5-4cdc-85ee-62af69a6f298
 
 ### Get all songs from all albums (via Gateway)
 GET http://localhost:8080/api/songs
 
 ### Get songs from specific album (via Gateway)
-GET http://localhost:8080/api/albums/c3d79e34-9281-49b7-85ec-d8d2a949cb82/songs
+GET http://localhost:8080/api/albums/1e0cbdc4-22d5-4cdc-85ee-62af69a6f298/songs
 
 ### Get specific song from album (via Gateway)
 GET http://localhost:8080/api/albums/c3d79e34-9281-49b7-85ec-d8d2a949cb82/songs/bef1379b-1669-450f-ae04-c4255ee58e10
@@ -59,8 +57,7 @@ Content-Type: application/json
 }
 
 ### Delete song (via Gateway)
-DELETE http://localhost:8080/api/albums/c3d79e34-9281-49b7-85ec-d8d2a949cb82/songs/bef1379b-1669-450f-ae04-c4255ee58e10
-
+DELETE http://localhost:8080/api/albums/8964f681-24c8-42bf-bc02-0caf420b7a2a/songs/228db286-dccb-4ef1-bbfd-2aca521e49e7
 ### Test: Get songs from non-existent album (via Gateway)
 GET http://localhost:8080/api/albums/00000000-0000-0000-0000-000000000000/songs
 
@@ -73,9 +70,8 @@ Content-Type: application/json
   "durationMinutes": 3
 }
 
-### ============================================
-### DIRECT SERVICE ACCESS (for testing)
-### ============================================
+
+### DIRECT
 
 ### Direct: Get all albums (Album Service - Port 8081)
 GET http://localhost:8081/api/albums

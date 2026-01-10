@@ -1,0 +1,129 @@
+version: '3.8'
+
+services:
+  # MySQL Database for Album Service
+  mysql-album:
+    image: mysql:8.0
+    container_name: mysql-album
+    ports:
+      - "3307:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=root_password
+      - MYSQL_DATABASE=album_db
+      - MYSQL_USER=album_user
+      - MYSQL_PASSWORD=album_password
+    volumes:
+      - mysql-album-data:/var/lib/mysql
+    networks:
+      - music-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+
+  # MySQL Database for Song Service
+  mysql-song:
+    image: mysql:8.0
+    container_name: mysql-song
+    ports:
+      - "3308:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=root_password
+      - MYSQL_DATABASE=song_db
+      - MYSQL_USER=song_user
+      - MYSQL_PASSWORD=song_password
+    volumes:
+      - mysql-song-data:/var/lib/mysql
+    networks:
+      - music-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+
+  # Song Service
+  song-service:
+    build:
+      context: ./song-service
+      dockerfile: Dockerfile
+    container_name: song-service
+    ports:
+      - "8082:8082"
+    environment:
+      - SERVER_PORT=8082
+      - SPRING_APPLICATION_NAME=song-service
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-song:3306/song_db
+      - SPRING_DATASOURCE_USERNAME=song_user
+      - SPRING_DATASOURCE_PASSWORD=song_password
+    depends_on:
+      mysql-song:
+        condition: service_healthy
+    networks:
+      - music-network
+    command: sh -c "sleep 5 && java -jar target/song-service-1.0-SNAPSHOT.jar"
+
+  # Album Service
+  album-service:
+    build:
+      context: ./album-service
+      dockerfile: Dockerfile
+    container_name: album-service
+    ports:
+      - "8081:8081"
+    environment:
+      - SERVER_PORT=8081
+      - SPRING_APPLICATION_NAME=album-service
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-album:3306/album_db
+      - SPRING_DATASOURCE_USERNAME=album_user
+      - SPRING_DATASOURCE_PASSWORD=album_password
+      - SONG_SERVICE_URL=http://song-service:8082
+    depends_on:
+      mysql-album:
+        condition: service_healthy
+      song-service:
+        condition: service_started
+    networks:
+      - music-network
+    command: sh -c "sleep 8 && java -jar target/album-service-1.0-SNAPSHOT.jar"
+
+  # Gateway Service
+  gateway-service:
+    build:
+      context: ./gateway-service
+      dockerfile: Dockerfile
+    container_name: gateway-service
+    ports:
+      - "8080:8080"
+    environment:
+      - SERVER_PORT=8080
+      - SPRING_APPLICATION_NAME=gateway-service
+    depends_on:
+      - album-service
+      - song-service
+    networks:
+      - music-network
+    command: sh -c "sleep 10 && java -jar target/gateway-service-1.0-SNAPSHOT.jar"
+
+  # Angular Frontend
+  angular-app:
+    build:
+      context: ./music-management
+      dockerfile: Dockerfile
+    container_name: angular-app
+    ports:
+      - "3000:80"
+    environment:
+      - NGINX_HOST=localhost
+      - NGINX_PORT=80
+    depends_on:
+      - gateway-service
+    networks:
+      - music-network
+
+networks:
+  music-network:
+    driver: bridge
+
+volumes:
+  mysql-album-data:
+  mysql-song-data:

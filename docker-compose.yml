@@ -1,7 +1,8 @@
-version: '3.8'
-
 services:
-  # MySQL Database for Album Service
+  # ============================================
+  # BAZY DANYCH (MySQL)
+  # ============================================
+
   mysql-album:
     image: mysql:8.0
     container_name: mysql-album
@@ -18,10 +19,10 @@ services:
       - music-network
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 5s
       timeout: 20s
       retries: 10
 
-  # MySQL Database for Song Service
   mysql-song:
     image: mysql:8.0
     container_name: mysql-song
@@ -38,55 +39,114 @@ services:
       - music-network
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 5s
       timeout: 20s
       retries: 10
 
-  # Song Service
-  song-service:
+  # ============================================
+  # SERVICE DISCOVERY (Eureka)
+  # ============================================
+
+  eureka-service:
+    build:
+      context: ./eureka-service
+      dockerfile: Dockerfile
+    container_name: eureka-service
+    ports:
+      - "8761:8761"
+    networks:
+      - music-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8761/actuator/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 40s
+
+  # ============================================
+  # MIKROUSŁUGI (Spring Boot)
+  # ============================================
+
+  # Pierwsza instancja serwisu piosenek
+  song-service-1:
     build:
       context: ./song-service
       dockerfile: Dockerfile
-    container_name: song-service
-    ports:
-      - "8082:8082"
     environment:
       - SERVER_PORT=8082
       - SPRING_APPLICATION_NAME=song-service
+      - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://eureka-service:8761/eureka/
       - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-song:3306/song_db
       - SPRING_DATASOURCE_USERNAME=song_user
       - SPRING_DATASOURCE_PASSWORD=song_password
     depends_on:
       mysql-song:
         condition: service_healthy
+      eureka-service:
+        condition: service_healthy
     networks:
       - music-network
-    command: sh -c "sleep 5 && java -jar target/song-service-1.0-SNAPSHOT.jar"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8082/actuator/health"]
+      interval: 10s
+      timeout: 10s
+      retries: 15
+      start_period: 90s
 
-  # Album Service
+  # Druga instancja serwisu piosenek (Lab 7 - Load Balancing)
+  song-service-2:
+    build:
+      context: ./song-service
+      dockerfile: Dockerfile
+    environment:
+      - SERVER_PORT=8082
+      - SPRING_APPLICATION_NAME=song-service
+      - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://eureka-service:8761/eureka/
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-song:3306/song_db
+      - SPRING_DATASOURCE_USERNAME=song_user
+      - SPRING_DATASOURCE_PASSWORD=song_password
+    depends_on:
+      mysql-song:
+        condition: service_healthy
+      eureka-service:
+        condition: service_healthy
+    networks:
+      - music-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8082/actuator/health"]
+      interval: 10s
+      timeout: 10s
+      retries: 15
+      start_period: 90s
+
+  # Serwis albumów
   album-service:
     build:
       context: ./album-service
       dockerfile: Dockerfile
-    container_name: album-service
-    ports:
-      - "8081:8081"
     environment:
       - SERVER_PORT=8081
       - SPRING_APPLICATION_NAME=album-service
+      - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://eureka-service:8761/eureka/
       - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-album:3306/album_db
       - SPRING_DATASOURCE_USERNAME=album_user
       - SPRING_DATASOURCE_PASSWORD=album_password
-      - SONG_SERVICE_URL=http://song-service:8082
+      - SONG_SERVICE_URL=http://song-service
     depends_on:
       mysql-album:
         condition: service_healthy
-      song-service:
-        condition: service_started
+      eureka-service:
+        condition: service_healthy
     networks:
       - music-network
-    command: sh -c "sleep 8 && java -jar target/album-service-1.0-SNAPSHOT.jar"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8081/actuator/health"]
+      interval: 10s
+      timeout: 10s
+      retries: 15
+      start_period: 90s
 
-  # Gateway Service
+  # Bramka API (Gateway)
   gateway-service:
     build:
       context: ./gateway-service
@@ -97,14 +157,17 @@ services:
     environment:
       - SERVER_PORT=8080
       - SPRING_APPLICATION_NAME=gateway-service
+      - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://eureka-service:8761/eureka/
     depends_on:
-      - album-service
-      - song-service
+      eureka-service:
+        condition: service_healthy
     networks:
       - music-network
-    command: sh -c "sleep 10 && java -jar target/gateway-service-1.0-SNAPSHOT.jar"
 
-  # Angular Frontend
+  # ============================================
+  # FRONTEND (Angular + NGINX)
+  # ============================================
+
   angular-app:
     build:
       context: ./music-management
@@ -116,9 +179,14 @@ services:
       - NGINX_HOST=localhost
       - NGINX_PORT=80
     depends_on:
-      - gateway-service
+      gateway-service:
+        condition: service_started
     networks:
       - music-network
+
+# ============================================
+# KONFIGURACJA SIECI I WOLUMENÓW
+# ============================================
 
 networks:
   music-network:

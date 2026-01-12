@@ -6,10 +6,14 @@ spring:
     name: gateway-service
   cloud:
     gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
       routes:
         # Song Service - album-related song operations
         - id: song-service-album-songs
-          uri: http://song-service:8082
+          uri: lb://song-service
           predicates:
             - Path=/api/albums/*/songs,/api/albums/*/songs/**
           filters:
@@ -17,7 +21,7 @@ spring:
 
         # Song Service - get all songs (not in album context)
         - id: song-service-all
-          uri: http://song-service:8082
+          uri: lb://song-service
           predicates:
             - Path=/api/songs
             - Method=GET
@@ -26,11 +30,19 @@ spring:
 
         # Album Service - all album endpoints
         - id: album-service
-          uri: http://album-service:8081
+          uri: lb://album-service
           predicates:
             - Path=/api/albums/**
           filters:
             - StripPrefix=0
+
+# Eureka Client
+eureka:
+  client:
+    service-url:
+      defaultZone: http://eureka-service:8761/eureka/
+  instance:
+    prefer-ip-address: true
 
 logging:
   level:

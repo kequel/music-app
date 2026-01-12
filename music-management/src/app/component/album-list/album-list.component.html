@@ -1,0 +1,32 @@
+<div class="container">
+  <h1>Albums</h1>
+  
+  <button (click)="goToAdd()" class="btn-add">Add New Album</button>
+
+  <div *ngIf="albums.length === 0" class="no-data">
+    No albums found. Add your first album!
+  </div>
+
+  <table *ngIf="albums.length > 0">
+    <thead>
+      <tr>
+        <th>Title</th>
+        <th>Artist</th>
+        <th>Release Year</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let album of albums">
+        <td>{{ album.title }}</td>
+        <td>{{ album.artist }}</td>
+        <td>{{ album.releaseYear }}</td>
+        <td>
+          <button (click)="goToDetails(album.id)" class="btn-view">View</button>
+          <button (click)="goToEdit(album.id)" class="btn-edit">Edit</button>
+          <button (click)="deleteAlbum(album.id)" class="btn-delete">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

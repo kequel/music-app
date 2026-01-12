@@ -1,0 +1,46 @@
+<div class="container">
+  <div class="header-actions">
+    <button (click)="goBack()" class="btn-back">← Back to Albums</button>
+  </div>
+
+  <div *ngIf="album" class="album-info">
+    <h1>{{ album.title }}</h1>
+    <div class="details">
+      <p><strong>Artist:</strong> {{ album.artist }}</p>
+      <p><strong>Release Year:</strong> {{ album.releaseYear }}</p>
+    </div>
+    <button (click)="goToEdit()" class="btn-edit">Edit Album</button>
+  </div>
+
+  <div class="songs-section">
+    <div class="songs-header">
+      <h2>Songs</h2>
+      <button (click)="goToAddSong()" class="btn-add">Add New Song</button>
+    </div>
+
+    <div *ngIf="songs.length === 0" class="no-data">
+      No songs in this album yet. Add your first song!
+    </div>
+
+    <table *ngIf="songs.length > 0">
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Duration (minutes)</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let song of songs">
+          <td>{{ song.title }}</td>
+          <td>{{ song.durationMinutes }}</td>
+          <td>
+            <button (click)="goToSongDetails(song.id)" class="btn-view">View</button>
+            <button (click)="goToSongEdit(song.id)" class="btn-edit">Edit</button>
+            <button (click)="deleteSong(song.id)" class="btn-delete">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

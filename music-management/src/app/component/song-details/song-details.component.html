@@ -1,0 +1,22 @@
+<div class="container">
+  <div class="header-actions">
+    <button (click)="goBack()" class="btn-back">← Back to Album</button>
+  </div>
+
+  <div *ngIf="song" class="song-info">
+    <h1>{{ song.title }}</h1>
+    <div class="details">
+      <p><strong>Duration:</strong> {{ song.durationMinutes }} minutes</p>
+      <p *ngIf="song.albumTitle"><strong>Album:</strong> {{ song.albumTitle }}</p>
+    </div>
+    
+    <div class="action-buttons">
+      <button (click)="goToEdit()" class="btn-edit">Edit Song</button>
+      <button (click)="deleteSong()" class="btn-delete">Delete Song</button>
+    </div>
+  </div>
+
+  <div *ngIf="!song" class="loading">
+    Loading song details...
+  </div>
+</div>

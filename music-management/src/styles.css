@@ -1,227 +1,186 @@
+/* Spotify-inspired Modern Dark Theme */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&display=swap');
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  font-family: 'Inter', sans-serif;
 }
 
 body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #fce4ec;
-  color: #4a148c;
+  font-family: 'Inter', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  background-color: #000000; 
+  color: #FFFFFF;
   line-height: 1.6;
 }
 
 .container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 20px;
-  background-color: #ffffff;
+  padding: 30px;
+  background: linear-gradient(to bottom, #121212 0%, #000000 100%);
   min-height: 100vh;
-  box-shadow: 0 0 15px rgba(240, 98, 146, 0.3);
 }
 
 h1 {
-  color: #e91e63;
-  margin-bottom: 20px;
-  padding-bottom: 10px;
-  border-bottom: 3px solid #ff80ab;
+  color: #FFFFFF;
+  font-size: 32px;
+  font-weight: 800;
+  margin-bottom: 24px;
+  letter-spacing: -1px;
 }
 
 h2 {
-  color: #c2185b;
+  color: #FFFFFF;
+  font-size: 24px;
   margin-top: 30px;
   margin-bottom: 15px;
 }
 
 button {
-  padding: 10px 20px;
+  padding: 12px 24px;
   margin: 5px;
   border: none;
-  border-radius: 4px;
+  border-radius: 500px;
   cursor: pointer;
   font-size: 14px;
-  transition: all 0.3s ease;
-  color: white;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: transform 0.2s ease, background-color 0.2s ease;
 }
 
-.btn-add {
-  background-color: #ffcdd2;
-  color: #880e4f;
+button:hover {
+  transform: scale(1.04);
 }
 
-.btn-add:hover {
-  background-color: #ef9a9a;
+.btn-add, .btn-submit {
+  background-color: #1DB954;
+  color: #000000;
 }
 
-.btn-view {
-  background-color: #f8bbd0;
-  color: #4a148c;
+.btn-add:hover, .btn-submit:hover:not(:disabled) {
+  background-color: #1ed760;
 }
 
-.btn-view:hover {
-  background-color: #f48fb1;
+.btn-view, .btn-edit, .btn-back {
+  background-color: transparent;
+  color: #FFFFFF;
+  border: 1px solid #727272;
 }
 
-.btn-edit {
-  background-color: #e1bee7;
-  color: #4a148c;
-}
-
-.btn-edit:hover {
-  background-color: #ce93d8;
+.btn-view:hover, .btn-edit:hover, .btn-back:hover {
+  border-color: #FFFFFF;
 }
 
 .btn-delete {
-  background-color: #ffab91;
-  color: #b71c1c;
+  background-color: transparent;
+  color: #b3b3b3;
 }
 
 .btn-delete:hover {
-  background-color: #ff8a65;
-}
-
-.btn-back {
-  background-color: #b3e5fc;
-  color: #01579b;
-}
-
-.btn-back:hover {
-  background-color: #81d4fa;
-}
-
-.btn-submit {
-  background-color: #f06292;
-  color: white;
-  padding: 12px 30px;
-  font-size: 16px;
-}
-
-.btn-submit:hover:not(:disabled) {
-  background-color: #e91e63;
+  color: #ff4444;
 }
 
 .btn-submit:disabled {
-  background-color: #f48fb1;
+  background-color: #535353;
+  color: #b3b3b3;
   cursor: not-allowed;
-}
-
-.btn-cancel {
-  background-color: #cfd8dc;
-  color: #455a64;
-  padding: 12px 30px;
-  font-size: 16px;
-}
-
-.btn-cancel:hover {
-  background-color: #b0bec5;
 }
 
 table {
   width: 100%;
   border-collapse: collapse;
   margin-top: 20px;
-  box-shadow: 0 2px 8px rgba(240, 98, 146, 0.2);
+  background-color: transparent;
 }
 
 thead {
-  background-color: #f48fb1;
-  color: #4a148c;
+  border-bottom: 1px solid #282828;
+  color: #b3b3b3;
+  text-transform: uppercase;
+  font-size: 12px;
+  letter-spacing: 1px;
 }
 
 th, td {
-  padding: 12px;
+  padding: 16px;
   text-align: left;
-  border-bottom: 1px solid #f8bbd0;
+}
+
+tbody tr {
+  transition: background-color 0.3s ease;
 }
 
 tbody tr:hover {
-  background-color: #fffafa;
+  background-color: rgba(255, 255, 255, 0.1);
 }
 
 .form-group {
-  margin-bottom: 20px;
+  margin-bottom: 24px;
 }
 
 label {
   display: block;
-  margin-bottom: 5px;
-  font-weight: bold;
-  color: #e91e63;
+  margin-bottom: 8px;
+  font-weight: 700;
+  font-size: 14px;
+  color: #FFFFFF;
 }
 
 .form-control {
   width: 100%;
-  padding: 10px;
-  border: 1px solid #f8bbd0;
+  padding: 12px;
+  border: 1px solid transparent;
   border-radius: 4px;
   font-size: 14px;
-  background-color: #fffcfc;
+  background-color: #333333;
+  color: #FFFFFF;
 }
 
 .form-control:focus {
   outline: none;
-  border-color: #ff80ab;
-  box-shadow: 0 0 5px rgba(240, 98, 146, 0.5);
-}
-
-.error {
-  color: #d84315;
-  font-size: 12px;
-  margin-top: 5px;
-}
-
-.form-actions {
-  margin-top: 30px;
-  padding-top: 20px;
-  border-top: 1px solid #f8bbd0;
+  background-color: #404040;
+  border-color: #727272;
 }
 
 .album-info, .song-info {
-  background-color: #fce4ec;
-  padding: 20px;
+  background: linear-gradient(to bottom, #282828 0%, #121212 100%);
+  padding: 30px;
   border-radius: 8px;
   margin-bottom: 30px;
-  border: 1px solid #f48fb1;
 }
 
 .details p {
-  margin: 10px 0;
+  margin: 8px 0;
   font-size: 16px;
-  color: #4a148c;
+  color: #b3b3b3;
 }
 
-.header-actions {
-  margin-bottom: 20px;
-}
-
-.songs-section {
-  margin-top: 30px;
-}
-
-.songs-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-}
-
-.action-buttons {
-  margin-top: 20px;
+.details strong {
+  color: #FFFFFF;
 }
 
 .no-data {
-  padding: 40px;
+  padding: 60px;
   text-align: center;
-  color: #ad1457;
-  font-style: italic;
-  background-color: #f8bbd0;
+  color: #b3b3b3;
+  background-color: #121212;
   border-radius: 8px;
-  margin: 20px 0;
-  border: 1px solid #f06292;
 }
 
-.loading {
-  padding: 40px;
-  text-align: center;
-  color: #ad1457;
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: #000000;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #535353;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #b3b3b3;
 }
